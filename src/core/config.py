@@ -11,7 +11,8 @@ from handlers.users import (
     menu, 
     echo, 
     start, 
-    lang, 
+    lang,
+    cancel,
     analyzer, 
     subscription, 
     about_us,
@@ -38,6 +39,7 @@ async def configure():
     dp.include_routers(
         start.router,
         help.router,
+        cancel.router,
         menu.router,
         lang.router,
         calc_handler.router,

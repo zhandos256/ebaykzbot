@@ -8,21 +8,19 @@ from aiogram.enums.parse_mode import ParseMode
 
 from db.users_manager import get_data_from_db, check_subscription
 from keyboards.inline.analyzer import AnalyzerPaginate, analyzer_paginator
-from keyboards.inline.menu import back_to_menu
 from keyboards.inline.subscription import buy_subscription_keyboard
-
 
 router = Router()
 
 
 @router.callback_query(F.data == 'analyzer_callback')
-async def get_lang_callback_handler(call: types.CallbackQuery):
-    check = await check_subscription(call.from_user.id)
+async def get_lang_callback_handler(cb: types.CallbackQuery):
+    check = await check_subscription(cb.from_user.id)
     if not check:
         bad_template = [
             _('Ваша подписка не активна. ❌\n'),
         ]
-        await call.message.edit_text(
+        await cb.message.edit_text(
             text='\n'.join(bad_template),
             reply_markup=buy_subscription_keyboard(),
             parse_mode=ParseMode.HTML
@@ -38,7 +36,7 @@ async def get_lang_callback_handler(call: types.CallbackQuery):
         f'<b>{_("Ссылка")}</b>: <u>{hlink("Ссылка на товар", str(data[0][3]))}</u>',
     ]
 
-    await call.message.edit_text(
+    await cb.message.edit_text(
         text='\n'.join(content),
         reply_markup=analyzer_paginator(page=0, max_page=len(data)),
         parse_mode=ParseMode.HTML
@@ -46,7 +44,7 @@ async def get_lang_callback_handler(call: types.CallbackQuery):
 
 
 @router.callback_query(AnalyzerPaginate.filter(F.action.in_(['prev', 'next'])))
-async def analyzer_paginate_handler(call: types.CallbackQuery, callback_data: AnalyzerPaginate):
+async def analyzer_paginate_handler(cb: types.CallbackQuery, callback_data: AnalyzerPaginate):
     data = await get_data_from_db()
     page_num = int(callback_data.page)
     page = page_num - 1 if page_num > 0 else (len(data) - 1)
@@ -62,9 +60,9 @@ async def analyzer_paginate_handler(call: types.CallbackQuery, callback_data: An
     ]
 
     with suppress(TelegramBadRequest):
-        await call.message.edit_text(
+        await cb.message.edit_text(
             text='\n'.join(content),
             reply_markup=analyzer_paginator(page=page, max_page=len(data)),
             parse_mode=ParseMode.HTML
         )
-    await call.answer()
+    await cb.answer()

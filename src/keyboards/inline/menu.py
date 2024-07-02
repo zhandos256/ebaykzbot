@@ -34,6 +34,7 @@ def calc_again():
 def admin_main_menu():
     builder = InlineKeyboardBuilder()
     builder.add(InlineKeyboardButton(text='Показать всех пользователей', callback_data='show_users_callback'))
+    builder.add(InlineKeyboardButton(text=_('Главное меню'), callback_data='main_menu'))
     builder.adjust(1)
     return builder.as_markup()
 
