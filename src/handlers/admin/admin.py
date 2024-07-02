@@ -5,8 +5,7 @@ import aiosqlite
 from datetime import datetime
 from contextlib import suppress
 
-from aiogram import Router, F
-from aiogram import types
+from aiogram import Router, F, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -27,7 +26,7 @@ class A(StatesGroup):
 router = Router()
 
 
-@router.message(Command('update'))
+@router.message(Command('data_updated'))
 async def date_updated(msg: types.Message):
     async with aiosqlite.connect(USERS_DB) as conn:
         async with conn.execute('SELECT userid FROM Users WHERE subscription = 1') as res:
@@ -37,7 +36,7 @@ async def date_updated(msg: types.Message):
     await msg.answer(text='DONE')
 
 
-@router.message(IsAdmin(), Command('acti'))
+@router.message(IsAdmin(), Command('activate'))
 async def acti(msg: types.Message, state: FSMContext):
     await msg.answer(text='Get ID')
     await state.set_state(A.id)
@@ -100,7 +99,10 @@ async def send_users_message_without_sub(msg: types.Message):
 @router.message(IsAdmin(), Command('admin'))
 async def admin_panel(msg: types.Message):
     tempate = [
-        'Administrator super panel ⚙️',
+        'Панель администратора ⚙️\n',
+        '/send_promo - Отправить сообщение пользователям без подписки',
+        '/activate - Активировать подписку пользователя',
+        '/data_updated - Данные обновлены для подписчиков',
     ]
     await msg.answer(
         text='\n'.join(tempate),
@@ -111,7 +113,10 @@ async def admin_panel(msg: types.Message):
 @router.callback_query(IsAdmin(), F.data == 'admin_menu_callback')
 async def admin_menu_cb_handler(cb: types.CallbackQuery):
     tempate = [
-        'Панель администратора ⚙️',
+        'Панель администратора ⚙️\n',
+        '/send_promo - Отправить сообщение пользователям без подписки',
+        '/activate - Активировать подписку пользователя',
+        '/data_updated - Данные обновлены для подписчиков',
     ]
     await cb.message.edit_text(
         text='\n'.join(tempate),
