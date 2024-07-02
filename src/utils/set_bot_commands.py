@@ -11,5 +11,9 @@ async def set_commands(bot: Bot):
             command="/help",
             description='Получить справку'
         ),
+        BotCommand(
+            command="/menu",
+            description='Главное меню'
+        ),
     ]
     await bot.set_my_commands(main_menu)

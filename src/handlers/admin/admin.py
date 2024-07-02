@@ -19,11 +19,11 @@ from keyboards.inline.admin import users_paginator, UsersPaginate
 from keyboards.inline.menu import admin_main_menu
 from utils.notify import notify_user, notify_all_users
 
+router = Router()
+
+
 class A(StatesGroup):
     id = State()
-
-
-router = Router()
 
 
 @router.message(Command('data_updated'))
@@ -38,7 +38,7 @@ async def date_updated(msg: types.Message):
 
 @router.message(IsAdmin(), Command('activate'))
 async def acti(msg: types.Message, state: FSMContext):
-    await msg.answer(text='Get ID')
+    await msg.answer(text='Get ID or /cancel to cancel operation')
     await state.set_state(A.id)
 
 

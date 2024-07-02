@@ -7,3 +7,4 @@ venv
 *.tmp
 *.log
 *.sqlite
+.DS_Store
