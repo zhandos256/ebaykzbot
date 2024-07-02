@@ -1,7 +1,6 @@
 from contextlib import suppress
 
-from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram import Router, F, types
 from aiogram.utils.i18n import gettext as _
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.utils.markdown import hlink
@@ -17,13 +16,13 @@ router = Router()
 
 
 @router.callback_query(F.data == 'analyzer_callback')
-async def get_lang_callback_handler(callback: CallbackQuery):
-    check = await check_subscription(callback.from_user.id)
+async def get_lang_callback_handler(call: types.CallbackQuery):
+    check = await check_subscription(call.from_user.id)
     if not check:
         bad_template = [
             _('Ваша подписка не активна. ❌\n'),
         ]
-        await callback.message.edit_text(
+        await call.message.edit_text(
             text='\n'.join(bad_template),
             reply_markup=buy_subscription_keyboard(),
             parse_mode=ParseMode.HTML
@@ -39,7 +38,7 @@ async def get_lang_callback_handler(callback: CallbackQuery):
         f'<b>{_("Ссылка")}</b>: <u>{hlink("Ссылка на товар", str(data[0][3]))}</u>',
     ]
 
-    await callback.message.edit_text(
+    await call.message.edit_text(
         text='\n'.join(content),
         reply_markup=analyzer_paginator(page=0, max_page=len(data)),
         parse_mode=ParseMode.HTML
@@ -47,7 +46,7 @@ async def get_lang_callback_handler(callback: CallbackQuery):
 
 
 @router.callback_query(AnalyzerPaginate.filter(F.action.in_(['prev', 'next'])))
-async def analyzer_paginate_handler(callback: CallbackQuery, callback_data: AnalyzerPaginate):
+async def analyzer_paginate_handler(call: types.CallbackQuery, callback_data: AnalyzerPaginate):
     data = await get_data_from_db()
     page_num = int(callback_data.page)
     page = page_num - 1 if page_num > 0 else (len(data) - 1)
@@ -63,9 +62,9 @@ async def analyzer_paginate_handler(callback: CallbackQuery, callback_data: Anal
     ]
 
     with suppress(TelegramBadRequest):
-        await callback.message.edit_text(
+        await call.message.edit_text(
             text='\n'.join(content),
             reply_markup=analyzer_paginator(page=page, max_page=len(data)),
             parse_mode=ParseMode.HTML
         )
-    await callback.answer()
+    await call.answer()

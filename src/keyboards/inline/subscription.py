@@ -2,7 +2,6 @@ from aiogram.utils.i18n import gettext as _
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-
 def buy_subscription_keyboard():
     builder = InlineKeyboardBuilder()
     builder.row(InlineKeyboardButton(text=_('Купить подписку'), callback_data='subscription_callback'))

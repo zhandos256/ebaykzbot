@@ -5,7 +5,6 @@ from aiogram.utils.i18n import gettext as _
 
 from handlers.users.calc import rates
 
-
 class GeoCallbackData(CallbackData, prefix='geo'):
     geo: str
 

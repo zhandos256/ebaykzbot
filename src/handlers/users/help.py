@@ -1,5 +1,4 @@
-from aiogram import Router
-from aiogram.types import Message
+from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.utils.i18n import gettext as _
 
@@ -8,7 +7,7 @@ router = Router()
 
 
 @router.message(Command('help'))
-async def bot_help(message: Message):
+async def bot_help(msg: types.Message):
     template = [
         _('Список всех комманд\n'),
         _('/start - Приветственное сообзение'),
@@ -16,7 +15,7 @@ async def bot_help(message: Message):
         _('Если у вас есть вопросы, обращайтесь\n'),
         _('Телеграм: @EBAY_KZ_BOT_SUPPORT'),
     ]
-    await message.answer(
+    await msg.answer(
         text='\n'.join(template),
         reply_markup=None
     )

@@ -1,6 +1,5 @@
 from aiogram.fsm.state import State, StatesGroup
 
-
 class CalcState(StatesGroup):
     geo = State()
     logistic_type = State()

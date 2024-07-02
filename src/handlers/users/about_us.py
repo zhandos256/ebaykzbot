@@ -1,14 +1,12 @@
-from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram import Router, F, types
 from keyboards.inline.menu import back_to_menu
 from aiogram.utils.i18n import gettext as _
-
 
 router = Router()
 
 
 @router.callback_query(F.data == 'about_us_callback')
-async def get_lang_callback_handler(callback: CallbackQuery):
+async def get_lang_callback_handler(call: types.CallbackQuery):
     template = [
         _('О нас\n'),
         _('Наш бот создан для того, чтобы помочь вам зарабатывать деньги на Ebay.\n'),
@@ -19,7 +17,7 @@ async def get_lang_callback_handler(callback: CallbackQuery):
         _(' - Калькулятор стоимости товаров на Ebay, включая сборы и доставку из Казахстана 🇰🇿 в другие страны 🌎.\n'),
         _(' - Наш калькулятор доставки рассчитан исключительно на Казпочту.'),
     ]
-    await callback.message.edit_text(
+    await call.message.edit_text(
         text='\n'.join(template),
         reply_markup=back_to_menu()
     )

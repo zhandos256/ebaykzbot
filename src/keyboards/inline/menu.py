@@ -4,7 +4,6 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.utils.i18n import gettext as _
 
-
 def main_menu(has_admin: Optional[bool]):
     builder = InlineKeyboardBuilder()
     builder.add(InlineKeyboardButton(text=_('Калькулятор Ebay'), callback_data='calc_callback'))

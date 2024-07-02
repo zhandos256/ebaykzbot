@@ -6,7 +6,16 @@ from aiogram import Bot, Dispatcher
 from core.const import TOKEN
 from db.users_manager import init_users_tables
 from handlers.users.calc import handler as calc_handler
-from handlers.users import help, menu, echo, start, lang, analyzer, subscription, about_us
+from handlers.users import (
+    help, 
+    menu, 
+    echo, 
+    start, 
+    lang, 
+    analyzer, 
+    subscription, 
+    about_us,
+)
 from handlers.admin import admin
 from middleware.i18n import i18n_middleware
 from utils import set_bot_commands
