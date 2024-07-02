@@ -2,28 +2,23 @@ import logging
 import asyncio
 import aiosqlite
 
-from contextlib import suppress
-
-from core.const import USERS_DB
-
 from datetime import datetime
 from contextlib import suppress
 
 from aiogram import Router, F
 from aiogram import types
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 from aiogram.enums.parse_mode import ParseMode
-from aiogram.utils.markdown import hlink
 from aiogram.exceptions import TelegramBadRequest
 
+from core.const import USERS_DB
 from db.users_manager import get_all_users, update_user_subscription
 from filters.AdminCheck import IsAdmin
 from keyboards.inline.admin import users_paginator, UsersPaginate
 from keyboards.inline.menu import admin_main_menu
 from utils.notify import notify_user, notify_all_users
-
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
 
 class A(StatesGroup):
     id = State()
@@ -64,7 +59,7 @@ async def acti_st(msg: types.Message, state: FSMContext):
     try:
         await msg.bot.send_message(chat_id=int(msg.text), text='\n'.join(template_text_for_user))
     except Exception as e:
-        print(e)
+        logging.exception(e)
     await msg.answer('DONE !')
     await state.clear()
 

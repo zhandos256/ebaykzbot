@@ -1,22 +1,20 @@
-from aiogram import Router
-from aiogram.types import Message
+from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.utils.i18n import gettext as _
 
 from db.users_manager import register_on_start
 from keyboards.inline.menu import main_menu
 
-
 router = Router()
 
 
 @router.message(Command('start'))
-async def bot_start(message: Message):
+async def bot_start(msg: types.Message):
     await register_on_start(
-        userid=message.from_user.id, 
-        username=message.from_user.username, 
-        firstname=message.from_user.first_name,
-        lastname=message.from_user.last_name,
+        userid=msg.from_user.id, 
+        username=msg.from_user.username, 
+        firstname=msg.from_user.first_name,
+        lastname=msg.from_user.last_name,
         language='ru'
     )
     template = [
@@ -31,9 +29,8 @@ async def bot_start(message: Message):
         _('Если у вас возникли вопросы, пишите мне️'), 
         _('https://t.me/EBAY_KZ_BOT_SUPPORT - админ 👤'),
     ]
-
-    await message.answer(
+    await msg.answer(
         text='\n'.join(template),
-        reply_markup=main_menu(has_admin=1 if message.from_user.id == 6453546962 else 0),
+        reply_markup=main_menu(has_admin=1 if msg.from_user.id == 6453546962 else 0),
         disable_web_page_preview=1
     )

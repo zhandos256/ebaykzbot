@@ -1,16 +1,14 @@
-from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram import Router, F, types
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.i18n import gettext as _
 
 from keyboards.inline.menu import main_menu
 
-
 router = Router()
 
 
 @router.callback_query(F.data == 'main_menu')
-async def show_main_menu(callback: CallbackQuery, state: FSMContext):
+async def show_main_menu(call: types.CallbackQuery, state: FSMContext):
     st = await state.get_state()
     await state.clear() if st is not None else ...
     template = [
@@ -25,9 +23,8 @@ async def show_main_menu(callback: CallbackQuery, state: FSMContext):
         _('Если у вас возникли вопросы, пишите мне️'), 
         _('https://t.me/EBAY_KZ_BOT_SUPPORT - админ 👤'),
     ]
-
-    await callback.message.edit_text(
+    await call.message.edit_text(
         text='\n'.join(template),
-        reply_markup=main_menu(has_admin=1 if callback.from_user.id == 6453546962 else 0),
+        reply_markup=main_menu(has_admin=1 if call.from_user.id == 6453546962 else 0),
         disable_web_page_preview=1
     )

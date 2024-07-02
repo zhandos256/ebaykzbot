@@ -1,9 +1,9 @@
-from aiogram import Bot
 import logging
 import asyncio
 
-admins = (6453546962,)
+from aiogram import Bot
 
+admins = (6453546962,)
 
 async def notify_admins(bot: Bot, text: str):
     for admin in admins:
